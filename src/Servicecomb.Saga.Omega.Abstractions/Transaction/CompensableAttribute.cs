@@ -82,7 +82,7 @@ namespace Servicecomb.Saga.Omega.Abstractions.Transaction
         public void OnEntry()
         {
             var type = InitInstance.GetType();
-            _compensationContext.AddCompensationContext(type.GetMethod(CompensationMethod, BindingFlags.Instance | BindingFlags.NonPublic), type);
+            _compensationContext.AddCompensationContext(type.GetMethod(CompensationMethod, BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic), type);
 
             _omegaContext.NewLocalTxId();
             var paramBytes = _messageFormat.Serialize(Args);
@@ -91,13 +91,13 @@ namespace Servicecomb.Saga.Omega.Abstractions.Transaction
             _recoveryPolicy.BeforeApply(_compensableInterceptor, _omegaContext, _parenttxId, Retries, Timeout, CompensationMethod, paramBytes);
         }
 
-        public  void OnExit()
+        public void OnExit()
         {
             _recoveryPolicy.AfterApply(_compensableInterceptor, _parenttxId, CompensationMethod);
             _logger.Debug($"Transaction with context {_omegaContext} has finished.");
         }
 
-        public  void OnException(Exception exception)
+        public void OnException(Exception exception)
         {
             _logger.Error($"Transaction {_omegaContext.GetGlobalTxId()} failed.", exception);
             _recoveryPolicy.ErrorApply(_compensableInterceptor, _parenttxId, CompensationMethod, exception);

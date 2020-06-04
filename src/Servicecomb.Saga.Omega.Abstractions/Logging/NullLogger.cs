@@ -23,22 +23,27 @@ namespace Servicecomb.Saga.Omega.Abstractions.Logging
     {
         public void Debug(String message)
         {
+            //Console.WriteLine(message);
         }
 
         public void Info(String message)
         {
+            //Console.WriteLine(message);
         }
 
         public void Warning(String message)
         {
+            //Console.WriteLine(message);
         }
 
         public void Error(String message, Exception exception)
         {
+            //Console.WriteLine(message);
         }
 
         public void Trace(String message)
         {
+            //Console.WriteLine(message);
         }
     }
 }
