@@ -43,8 +43,12 @@ namespace Servicecomb.Saga.Omega.Abstractions.Context
             try
             {
                 _contexts.TryGetValue(compensationMethod, out contextInternal);
-                var classInstance = Activator.CreateInstance(contextInternal?.Target ?? throw new InvalidOperationException(), null);
+                // TODO ...............................
+                // 1、这段代码需要改造
+                //var classInstance = Activator.CreateInstance(contextInternal?.Target ?? throw new InvalidOperationException(), null);
 
+                // 2、改造为从ioc容器获取对象，而不是新创建
+                var classInstance = ServiceLocator.Current.GetInstance(contextInternal?.Target ?? throw new InvalidOperationException());
 
                 var messageFormat = (IMessageSerializer)ServiceLocator.Current.GetInstance(typeof(IMessageSerializer));
                 var parameterInfos = contextInternal.CompensationMethod.GetParameters();
